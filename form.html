@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <form class="py-3" v-if="!isSubmit">
+      <form class="py-3" v-if="!isSubmit" @submit.prevent="isSubmit = true">
         <label class="d-block" for="email">Email</label>
         <input type="text" v-model="email" id="email" required/>
         <hr />
@@ -30,7 +30,7 @@
           <input type="text" v-model="guests[index]" id="guest" required/>
           <hr />
         </div>
-        <button class="btn btn-success" type="submit" @click.prevent="isSubmit = !this.isSubmit">
+        <button class="btn btn-success" type="submit">
           Send Data
         </button>
       </form>
