@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>form</title>
+    <title>My Vuejs form</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -40,6 +40,7 @@
           <hr />
         </div>
 
+        <h3>Alert classes driven radio-buttons</h3>
         <div class="alert mb-3" :class="alertClassName">
           alertClassName = {{ alertClassName }}
         </div>
@@ -71,7 +72,8 @@
         </div>
 
         <div class="mb-3">Value of radios = {{ radioValue }}</div>
-
+        <hr>
+        <h3>Table classes driven checkboxes</h2>
         <table class="table mb-3" :class="tableClassName">
           <tr>
             <td>some</td>
@@ -86,7 +88,7 @@
             <td>some</td>
           </tr>
         </table>
-
+        <hr>
         <div class="mb-3">
           <div class="form-check mb-1" v-for="(value, name) in checkboxValues">
             <input
@@ -100,7 +102,27 @@
             </label>
           </div>
         </div>
+        <hr>
 
+        <h3>Alert styles driven inputs</h2>
+        <div class="alert mb-3" :style="properties">
+          properties = {{ properties }}
+        </div>
+        <table class="table table-bordered">
+          <tr>
+            <th>name</th>
+            <th>value</th>
+            <th>input</th>
+          </tr>
+          <tr v-for="(value, name) in properties">
+            <td>{{ name }}</td>
+            <td>{{ value }}</td>
+            <td>
+                <input type="text" v-model="properties[name]">
+            </td>
+          </tr>
+        </table>
+        <hr>
         <button class="btn btn-success mt-5" type="submit">
           Send Data
         </button>
@@ -171,6 +193,10 @@
             'table-dark': false,
             'table-hover': false,
             'table-some': false
+          },
+          properties: {
+            color: '',
+            backgroundColor: ''
           }
         },
 
