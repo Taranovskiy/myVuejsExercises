@@ -30,6 +30,22 @@
           <input type="text" v-model="guests[index]" id="guest" required/>
           <hr />
         </div>
+        <div class="alert mb-3" :class='alertClassName'>
+          alertClassName = {{ alertClassName }}
+        </div>
+        <div class="form-check mb-1">
+          <input class="form-check-input" type="radio" v-model="radioValue" id="exampleRadios1" value="warning">
+          <label class="form-check-label" for="exampleRadios1">
+            Warning
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="radio" v-model="radioValue" id="exampleRadios2" value="info">
+          <label class="form-check-label" for="exampleRadios2">
+            Info
+          </label>
+        </div>
+        <div class="mb-3">Value of radios = {{ radioValue }}</div>
         <button class="btn btn-success" type="submit">
           Send Data
         </button>
@@ -66,6 +82,17 @@
         </table>
       </template>
     </div>
+
+    <style>
+      .my-info {
+        outline: 1px solid blue;
+      }
+
+      .my-warning {
+        outline: 1px solid tomato;
+      }
+    </style>
+
     <script>
       const element = new Vue({
         el: '.container',
@@ -76,7 +103,17 @@
           lastName: '',
           phone: '',
           guests: [],
-          isSubmit: false
+          isSubmit: false,
+          radioValue: 'warning'
+        },
+
+        computed: {
+          alertClassName() {
+            return [
+              `alert-${this.radioValue}`,
+              `my-${this.radioValue}`
+            ];
+          }
         },
 
         methods: {
