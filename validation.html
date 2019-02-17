@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validation form page</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="form.html" class="badge badge-primary mb-2 mt-4 d-block">
+        <h4>Main form page</h4>
+      </a>
+      <a href="scroll.html" class="badge badge-success mb-4 d-block">
+        <h4>Scroll page</h4>
+      </a>
+      <div class="sample">
+        <form>
+          <div class="progress">
+            <div class="progress-bar" :style="progressBarWidth"></div>
+          </div>
+          <div>
+            <div class="form-group" v-for="(item, index) in info" :key="index">
+              <label :for="index" class="mr-2">{{ item.name }}</label>
+              <i class="fas" :class="validIconClassName(item.name)"></i>
+              <input 
+                type="text"
+                class="form-control"
+                :id="index"
+                v-model="item.value"
+                @input="validation(item.name, item.value)"
+              />
+            </div>
+          </div>
+          <button class="btn btn-primary" :disabled="formIsValid">
+            Send Data
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <style>
+      .fa-check-circle {
+        color: green;
+      }
+
+      .fa-exclamation-circle {
+        color: red;
+      }
+    </style>
+
+    <script>
+      new Vue({
+        el: '.sample',
+
+        data: {
+          info: [
+            {
+              name: 'Name',
+              value: '',
+              pattern: /^[a-zA-Z ]{4,30}$/,
+              isValid: false,
+            },
+            {
+              name: 'Phone',
+              value: '',
+              pattern: /^[0-9]{7,14}$/,
+              isValid: false,
+            },
+            {
+              name: 'Email',
+              value: '',
+              pattern: /[\w-]+@([\w-]+\.)+[\w-]+/,
+              isValid: false,
+            }
+          ],
+        },
+
+        computed: {
+          progressBarWidth() {
+            return {
+              width: `${33.33 * this.validFieldCount}%`
+            } 
+          },
+
+          validFieldCount() {
+            return this.info.reduce((acc, item) => {
+              if (item.isValid) {
+                return acc + 1;
+              }
+              return acc;
+            }, 0);
+          },
+
+          formIsValid() {
+            return this.info.find(item => !item.isValid);
+          }
+        },
+
+        methods: {
+          validation(name, value) {
+            const currentField = this.info.find(item => item.name === name);
+            currentField.isChecked = true; 
+
+            if (currentField.pattern.test(value)) {
+              currentField.isValid = true;
+              this.progressBarWidth;
+
+            } else {
+              currentField.isValid = false;
+            }
+          },
+
+          validIconClassName(name) {
+            const currentField = this.info.find(item => item.name === name);
+
+            if (currentField.isValid && currentField.isChecked) {
+              this.progressBarWidth;
+              return 'fa-check-circle';
+            } else if (!currentField.isValid && currentField.isChecked) {
+              return 'fa-exclamation-circle';
+            } else {
+              return '';
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

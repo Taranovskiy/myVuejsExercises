@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Vuejs form</title>
+    <title>Main page</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -14,6 +14,12 @@
   </head>
   <body>
     <div class="container">
+      <a href="validation.html" class="badge badge-primary mb-2 mt-4 d-block">
+        <h4>Validation form page</h4>
+      </a>
+      <a href="scroll.html" class="badge badge-success mb-4 d-block">
+        <h4>Scroll page</h4>
+      </a>
       <form class="py-3" v-if="!isSubmit" @submit.prevent="isSubmit = true">
         <label class="d-block" for="email">Email</label>
         <input type="text" v-model="email" id="email" required />
@@ -104,9 +110,10 @@
         </div>
         <hr>
 
-        <h3>Alert styles driven inputs</h2>
-        <div class="alert mb-3" :style="properties">
-          properties = {{ properties }}
+        <h3>Alert styles driven inputs & button</h2>
+        <button class="btn btn-primary mb-2" type="button" @click='height += 10'>height ++</button>
+        <div class="alert mb-3" :style="[properties, alertHeight]">
+          properties = {{ properties }} height = {{ alertHeight }}
         </div>
         <table class="table table-bordered">
           <tr>
@@ -174,6 +181,10 @@
         color: magenta;
         background-color: aqua;
       }
+
+      .alert {
+        transition: min-height 0.5s;
+      }
     </style>
 
     <script>
@@ -196,8 +207,10 @@
           },
           properties: {
             color: '',
-            backgroundColor: ''
-          }
+            backgroundColor: '',
+            border: '1px solid tomato'
+          },
+          height: 60
         },
 
         computed: {
@@ -207,6 +220,12 @@
 
           tableClassName() {
             return this.checkboxValues;
+          },
+
+          alertHeight() {
+            return {
+              minHeight: `${this.height}px`
+            }
           }
         },
 
