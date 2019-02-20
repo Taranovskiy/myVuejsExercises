@@ -89,7 +89,7 @@
         computed: {
           progressBarWidth() {
             return {
-              width: `${33.33 * this.validFieldCount}%`
+              width: `${100 / this.info.length * this.validFieldCount}%`
             } 
           },
 
