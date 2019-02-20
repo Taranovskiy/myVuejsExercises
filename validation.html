@@ -33,15 +33,21 @@
           </div>
           <div>
             <div class="form-group" v-for="(item, index) in info" :key="index">
-              <span>{{ item.isValid }}</span>
               <label :for="index" class="mr-2">{{ item.name }}</label>
-              <i class="fas" :class="validIconClassName(item.name)"></i>
+              <i
+                v-if="info[index].isChecked"
+                class="fas"
+                :class="info[index].isValid ?
+                        'fa-check-circle' :
+                        'fa-exclamation-circle'"
+              >
+              </i>
               <input 
                 type="text"
                 class="form-control"
                 :id="index"
                 v-model="item.value"
-                @input="validation(item.name, item.value)"
+                @input="validation(item.value, index)"
               />
             </div>
           </div>
@@ -108,34 +114,18 @@
         },
 
         methods: {
-          validation(name, value) {
-            const currentField = this.info.find(item => item.name === name);
+          validation(value, index) {
+            const currentField = this.info[index];
             currentField.isChecked = true; 
-
-            if (currentField.pattern.test(value)) {
-              currentField.isValid = true;
-              this.progressBarWidth;
-
-            } else {
-              currentField.isValid = false;
-            }
-          },
-
-          validIconClassName(name) {
-            const currentField = this.info.find(item => item.name === name);
-            if (currentField.isValid && currentField.isChecked) {
-              this.progressBarWidth;
-              return 'fa-check-circle';
-            } else if (!currentField.isValid && currentField.isChecked) {
-              return 'fa-exclamation-circle';
-            } else {
-              return '';
-            }
+            currentField.isValid = currentField.pattern.test(value);
           }
         },
 
         beforeMount() {
-          this.info.forEach(item => this.$set(item, 'isValid', false));
+          this.info.forEach(item => {
+            this.$set(item, 'isValid', false);
+            this.$set(item, 'isChecked', false);
+          });
         },
         
       });
