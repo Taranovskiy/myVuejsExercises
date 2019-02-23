@@ -38,7 +38,7 @@
               :name="item.name"
               :value="item.value"
               :pattern="item.pattern"
-              @input="onInput(index, $event)"
+              @change-field-data="onChangeFieldData(index, $event)"
               >
             </app-input>
           </div>
@@ -100,7 +100,7 @@
         methods: {
           onInput(evt) {
             this.isActivated = true;
-            this.$emit('input', {
+            this.$emit('change-field-data', {
               value: evt.target.value,
               isValid: this.isValid
             });
@@ -145,9 +145,7 @@
         },
 
         methods: {
-          onInput(index, data) {
-            console.log('--->>', 'index ', index);
-            console.log('--->>', 'data ', data);
+          onChangeFieldData(index, data) {
             this.info[index].value = data.value;
           }
         },
