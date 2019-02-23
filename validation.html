@@ -32,24 +32,15 @@
             <div class="progress-bar" :style="progressBarWidth"></div>
           </div>
           <div>
-            <div class="form-group" v-for="(item, index) in info" :key="index">
-              <label :for="index" class="mr-2">{{ item.name }}</label>
-              <i
-                v-if="info[index].isChecked"
-                class="fas"
-                :class="info[index].isValid ?
-                        'fa-check-circle' :
-                        'fa-exclamation-circle'"
+            <app-input 
+              v-for="(item, index) in info"
+              :key="index"
+              :name="item.name"
+              :value="item.value"
+              :pattern="item.pattern"
+              @input="onInput(index, $event)"
               >
-              </i>
-              <input 
-                type="text"
-                class="form-control"
-                :id="index"
-                v-model="item.value"
-                @input="validation(item.value, index)"
-              />
-            </div>
+            </app-input>
           </div>
           <button class="btn btn-primary" :disabled="formIsValid">
             Send Data
@@ -69,6 +60,55 @@
     </style>
 
     <script>
+      Vue.component('appInput', {
+        props: ['name', 'value', 'pattern'],
+
+        template: `
+          <div class="form-group">
+            <label class="mr-2">{{ name }}</label>
+            <i
+              v-if="isActivated"
+              class="fas"
+              :class=" classOnValidation"
+            >
+            </i>
+            <input 
+              type="text"
+              class="form-control"
+              :value="value"
+              @input="onInput($event)"
+            />
+          </div> 
+        `,
+
+        data() {
+          return {
+            isActivated: this.value != ''
+          }
+        },
+
+        computed: {
+          classOnValidation() {
+            return this.isValid ? 'fa-check-circle' : 'fa-exclamation-circle'
+          },
+
+          isValid() {
+            return this.pattern.test(this.value);
+          }
+        },
+
+        methods: {
+          onInput(evt) {
+            this.isActivated = true;
+            this.$emit('input', {
+              value: evt.target.value,
+              isValid: this.isValid
+            });
+          },
+        }
+
+      });
+
       new Vue({
         el: '.sample',
 
@@ -77,7 +117,7 @@
             {
               name: 'Name',
               value: '',
-              pattern: /^[a-zA-Z ]{4,30}$/,
+              pattern: /^[a-zA-Z ]{2,30}$/,
             },
             {
               name: 'Phone',
@@ -99,25 +139,16 @@
             } 
           },
 
-          validFieldCount() {
-            return this.info.reduce((acc, item) => {
-              if (item.isValid) {
-                return acc + 1;
-              }
-              return acc;
-            }, 0);
-          },
-
           formIsValid() {
             return this.info.find(item => !item.isValid);
           }
         },
 
         methods: {
-          validation(value, index) {
-            const currentField = this.info[index];
-            currentField.isChecked = true; 
-            currentField.isValid = currentField.pattern.test(value);
+          onInput(index, data) {
+            console.log('--->>', 'index ', index);
+            console.log('--->>', 'data ', data);
+            this.info[index].value = data.value;
           }
         },
 
