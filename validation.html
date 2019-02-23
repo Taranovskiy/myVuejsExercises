@@ -117,20 +117,17 @@
             {
               name: 'Name',
               value: '',
-              pattern: /^[a-zA-Z ]{2,30}$/,
+              pattern: /^[a-zA-Z ]{2,30}$/
             },
             {
               name: 'Phone',
               value: '',
-              // pattern: /^[0-9]{7,14}$/,
-              pattern: /^[a-zA-Z ]{2,30}$/,
+              pattern: /^[0-9]{7,14}$/
             },
             {
               name: 'Email',
               value: '',
-              // pattern: /[\w-]+@([\w-]+\.)+[\w-]+/,
-              // pattern: /[\w-]+@([\w-]+\.)+[\w-]+/,
-              pattern: /^[a-zA-Z ]{2,30}$/,
+              pattern: /[\w-]+@([\w-]+\.)+[\w-]+/
             }
           ],
         },
@@ -142,6 +139,15 @@
             } 
           },
 
+          validFieldCount() {
+            return this.info.reduce((acc, item) => {
+              if (item.isValid) {
+                return acc + 1;
+              }
+              return acc;
+            }, 0);
+          },
+
           formIsValid() {
             return this.info.find(item => !item.isValid);
           }
@@ -149,8 +155,6 @@
 
         methods: {
           onChangeFieldData(index, data) {
-            console.log('--->>', 'data.isValid', data.isValid);
-            
             this.info[index].value = data.value;
             this.info[index].isValid = data.isValid
           }
